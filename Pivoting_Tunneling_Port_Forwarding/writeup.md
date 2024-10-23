@@ -155,7 +155,9 @@ proxychains xfreerdp /v:172.16.5.19 /u:victor /p:pass@123
 
 sudo sshuttle -e 'ssh -i id_rsa' -r webadmin@10.129.171.56 172.16.5.0/23 -v
 
-
+#another thing
+ssh  -L 9443:127.0.0.1:9443  -L 8111:127.0.0.1:8111  -L 9000:127.0.0.1:9000  -L 5000:127.0.0.1:5000 john@10.10.11.13 -i id_rsa
+#######
 
 for i in {1..254} ;do (ping -c 1 172.16.5.$i | grep "bytes from" &) ;done
 64 bytes from 172.16.5.15: icmp_seq=1 ttl=64 time=0.029 ms

